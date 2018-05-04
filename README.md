@@ -8,3 +8,6 @@ These feature scan be used in machine learning applications, such as
 classification of song by genre or composer.
 
 
+# Source MIDI data drawn from the following sources:
+[Classical Music](http://www.piano-midi.de/)
+[Jazz Music](http://bushgrafts.com/)
