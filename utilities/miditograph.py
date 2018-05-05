@@ -18,8 +18,6 @@ def quantize(note_length):
     for i, l in enumerate(lengths):
         diffs[i] = abs(l - note_length)
     closest = min(diffs)
-    #print(note_length, end=" ")
-    #print(list(diffs).index(closest), end=", ")
     return list(diffs).index(closest)
 
 #parse note data from track to list of notes
@@ -30,22 +28,19 @@ def parse_note_data(track, ticks_per_beat):
     beats_per_measure = 4
     unit_length = 4
     current_time = 0
-    current_chord = 0
     note_counter = 0
     for msg in track:
         current_time += msg.time
         if msg.type   == 'note_on': 
             if msg.velocity != 0: #note pressed
                 note_counter += 1
-                if len(being_played) == 0:
-                    note_data.append([])
-                    current_chord += 1
+                note_data.append([])
                 if msg.time != 0: #rest since previous note
                     pass #being_played[msg.note] = msg.time/ticks_per_beat  
                 being_played[msg.note] = current_time 
             elif msg.velocity == 0 and msg.note in being_played: #note released
                 duration = current_time - being_played[msg.note]
-                note_data[current_chord - 1].append((msg.note, quantize(duration/ticks_per_beat)))
+                note_data[note_counter - 1].append((msg.note, quantize(duration/ticks_per_beat)))
                 del being_played[msg.note]
         elif msg.type == 'note_off':
             pass
@@ -56,8 +51,8 @@ def parse_note_data(track, ticks_per_beat):
             unit_length = msg.denominator
         else:
             pass
-            #print(msg)
-    return note_data 
+    
+    return list(filter(([]).__ne__,note_data))
 
 def generate_graph(note_data):
     notes = {} 
