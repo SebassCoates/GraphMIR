@@ -67,7 +67,7 @@ def generate_graph(note_data):
             if note not in notes:
                 notes[note] = note_index
                 note_index += 1
-    
+    print("Number of Unique Notes: " +  str(len(notes)))
     adjMatrix = np.zeros((len(notes), len(notes)))
     
     prev_notes = []
@@ -111,8 +111,9 @@ note_data = []
 for i, midi_file in enumerate(midi_files):
     mid, name = midi_file
     merged = M.merge_tracks(mid.tracks)
-    note_data.append(parse_note_data(mid.tracks[0], mid.ticks_per_beat))
+    note_data.append(parse_note_data(merged, mid.ticks_per_beat))
     adjMatrix = generate_graph(note_data[i])
     write_graph(adjMatrix, output_directory, str(i))
+    print(note_data)
     print('Wrote ' + name) 
 
