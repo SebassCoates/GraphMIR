@@ -99,6 +99,10 @@ for arg in argv[1:]:
         print("Unexpected argument: " + arg)
         print("Expecting midi file (.mid, .MID) or outputfile path")
 
+if output_directory == "":
+    print('Not output directory specified')
+    quit()
+
 note_data = []
 for i, midi_file in enumerate(midi_files):
     mid, name = midi_file
