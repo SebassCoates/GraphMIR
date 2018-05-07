@@ -24,8 +24,8 @@ for i, row in enumerate(jrowdata):
             jrowdata[i][j] = entry.split(',')
 
 trainingdata = np.vstack((np.array(crowdata), np.array(jrowdata)))
-features = trainingdata[:,:5,:20]
-labels = trainingdata[:,0,20]
+features = trainingdata[:,:3,:3] #[:, num graphs, :num features - 2(offset by label)]
+labels = trainingdata[:,0,3] #[:,0:, numgraphs]
 
 fixedfeatures = np.zeros((len(features), len(features[0].flatten())), dtype='int32')
 for i, feature in enumerate(features):
@@ -41,7 +41,7 @@ for K in Ks:
 print()
 
 print("Testing Decision Tree")
-depths = [i + 1 for i in range((100))]
+depths = [1, 5, 10, 25, 50, 75, 100, 150, 200]
 for depth in depths:
     classifier = tree.DecisionTreeClassifier(max_depth=depth)
     scores = cross_val_score(classifier, features, labels, cv=10)
@@ -49,7 +49,7 @@ for depth in depths:
 print()
 
 print("Adaboosting")
-numEstimators = [i for i in range(2, 16)]
+numEstimators = [i for i in range(110, 150, 1)]
 for num in numEstimators:
     classifier = AdaBoostClassifier(n_estimators=num) 
     scores = cross_val_score(classifier, features, labels, cv=10)
@@ -57,7 +57,7 @@ for num in numEstimators:
 print()
 
 print("Gradient Boosting")
-numEstimators = [i for i in range(25, 39, 1)]
+numEstimators = [i for i in range(1, 250, 10)]
 for num in numEstimators:
     classifier = GradientBoostingClassifier(n_estimators=num) 
     scores = cross_val_score(classifier, features, labels, cv=10)

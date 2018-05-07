@@ -147,7 +147,8 @@ if label == '':
     print("Err: label not specified")
     quit()
 
-features = np.zeros((len(rawdata), 5, 20), dtype='int32')
+#[num songs, num features per graph, num graphs per song]
+features = np.zeros((len(rawdata), 5, 3), dtype='int32')
 for i, graphs in enumerate(rawdata):
     for j, graph in enumerate(graphs):
         if len(graph) > 0:
@@ -172,7 +173,6 @@ for i, graphs in enumerate(rawdata):
 outfile = open('data_label=' + label + ".csv", 'w')
 for row in features:
     for featurerow in row:
-        print(featurerow)
         for feature in featurerow:
             outfile.write(str(feature))
             outfile.write(',')
