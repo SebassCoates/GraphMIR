@@ -132,7 +132,7 @@ path  = ''
 rawdata = []
 for arg in argv[1:]:
     if "--label=" not in arg:
-        rawdata.append(open(arg).read().split('\n'))
+        rawdata.append(open(arg).read().split('NEXTGRAPH'))
     elif "--label=" in arg:
         if label == '':
             label = arg.replace('--label=', '')
@@ -147,32 +147,35 @@ if label == '':
     print("Err: label not specified")
     quit()
 
-features = np.zeros((len(rawdata), 10), dtype='int32')
-for i, graph in enumerate(rawdata):
-    adjMatrix = np.zeros((len(graph),len(graph)), dtype='int32')
-    for r, row in enumerate(graph):
-        row = row.split(' ')
-        for pair in row:
-            split = pair.split(',')
-            if len(split) < 2:
-                break #done reading row
-            adjMatrix[r][int(split[0])] = int(float(split[1]))
-
-    features[i][0] = len(graph) #Number of nodes
-    features[i][1] = np.sum(adjMatrix) #Number of edges
-    features[i][2], features[i][3] = (num_SCCs(adjMatrix))
-    features[i][4] = dijkstras(adjMatrix)
-    features[i][5] = kruskals(adjMatrix)
-
-    print(".", end="")
-    stdout.flush()
-print()
+features = np.zeros((len(rawdata), 10, 20), dtype='int32')
+for i, graphs in enumerate(rawdata):
+    for j, graph in enumerate(graphs):
+        if len(graph) > 0:
+            graph = graph.split('\n')
+            adjMatrix = np.zeros((len(graph),len(graph)), dtype='int32')
+            for r, row in enumerate(graph):
+                row = row.split(' ')
+                for pair in row:
+                    split = pair.split(',')
+                    if len(split) < 2:
+                        break #done reading row
+                    adjMatrix[r][int(split[0])] = int(float(split[1]))
+            features[i][0][j] = len(graph) #Number of nodes
+            features[i][1][j] = np.sum(adjMatrix) #Number of edges
+            features[i][2][j], features[i][3][j] = (num_SCCs(adjMatrix))
+            features[i][4][j] = dijkstras(adjMatrix)
+            #features[i][5][j] = kruskals(adjMatrix)
+            print(".", end="")
+            stdout.flush()
+    print()
 
 outfile = open('data_label=' + label + ".csv", 'w')
 for row in features:
-    for feature in row:
-        outfile.write(str(feature))
-        outfile.write(',')
-    outfile.write(label)
-    outfile.write('\n')
+    for featurerow in row:
+        for feature in featurerow:
+            outfile.write(str(feature))
+            outfile.write(',')
+        outfile.write(label)
+        outfile.write('\n')
+    outfile.write('NEXTSONG')
 outfile.close()

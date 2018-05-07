@@ -5,18 +5,42 @@ from sklearn.model_selection import cross_val_score
 
 import numpy as np
 
-classicaldata = open('data_label=0.csv', 'r').read().split('\n')
-crowdata = [row.split(',') for row in classicaldata]
+classicaldata = open('data_label=0.csv', 'r').read().split('NEXTSONG')
+crowdata = [row.split('\n') for row in classicaldata] 
 crowdata.remove([''])
+for i, row in enumerate(crowdata):
+    row.remove('')
+    if len(row) > 0:
+        for j, entry in enumerate(row):
+            crowdata[i][j] = entry.split(',')
 
-jazzdata = open('data_label=1.csv', 'r').read().split('\n')
-jrowdata = [row.split(',') for row in jazzdata]
+jazzdata = open('data_label=1.csv', 'r').read().split('NEXTSONG')
+jrowdata = [row.split('\n') for row in jazzdata]
 jrowdata.remove([''])
+for i, row in enumerate(jrowdata):
+    row.remove('')
+    if len(row) > 0:
+        for j, entry in enumerate(row):
+            jrowdata[i][j] = entry.split(',')
 
 trainingdata = np.vstack((np.array(crowdata), np.array(jrowdata)))
-num_features = np.shape(trainingdata)[1] - 1
-features = trainingdata[:,0:num_features]
-labels = trainingdata[:,num_features]
+#num_features = np.shape(trainingdata)[1] - 1
+#print(num_features)
+features = trainingdata[:,:5,:20]
+labels = trainingdata[:,0,20]
+#print(len(labels))
+#print(labels)
+#quit()
+#fixedlabels = np.zeros(np.shape(features)[0])
+#for i, labelset in enumerate((labels)):
+#    fixedlabels[i] = labelset[len(labelset) - 1]
+#labels = fixedlabels
+
+fixedfeatures = np.zeros((len(features), len(features[0].flatten())), dtype='int32')
+for i, feature in enumerate(features):
+    fixedfeatures[i] = feature.flatten()[0:len(feature.flatten())] 
+features = fixedfeatures
+
 
 print("Testing KNN, 10-Fold CV")
 Ks = [1, 3, 5, 7, 9, 13, 21, 49, 101]
@@ -27,7 +51,7 @@ for K in Ks:
 print()
 
 print("Testing Decision Tree")
-depths = [i + 1 for i in range((num_features))]
+depths = [i + 1 for i in range((100))]
 for depth in depths:
     classifier = tree.DecisionTreeClassifier(max_depth=depth)
     scores = cross_val_score(classifier, features, labels, cv=10)
