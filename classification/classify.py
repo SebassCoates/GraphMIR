@@ -24,23 +24,13 @@ for i, row in enumerate(jrowdata):
             jrowdata[i][j] = entry.split(',')
 
 trainingdata = np.vstack((np.array(crowdata), np.array(jrowdata)))
-#num_features = np.shape(trainingdata)[1] - 1
-#print(num_features)
 features = trainingdata[:,:5,:20]
 labels = trainingdata[:,0,20]
-#print(len(labels))
-#print(labels)
-#quit()
-#fixedlabels = np.zeros(np.shape(features)[0])
-#for i, labelset in enumerate((labels)):
-#    fixedlabels[i] = labelset[len(labelset) - 1]
-#labels = fixedlabels
 
 fixedfeatures = np.zeros((len(features), len(features[0].flatten())), dtype='int32')
 for i, feature in enumerate(features):
     fixedfeatures[i] = feature.flatten()[0:len(feature.flatten())] 
 features = fixedfeatures
-
 
 print("Testing KNN, 10-Fold CV")
 Ks = [1, 3, 5, 7, 9, 13, 21, 49, 101]
