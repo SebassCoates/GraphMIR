@@ -33,12 +33,12 @@ testlabels = testdata[:,num_features]
 def print_accuracy(real, predicted):
     incorrect = 0
     for i, val in enumerate(real):
-        if val != predicted[i]:
+        if val == predicted[i]:
             incorrect +=1
     print('Test Accuracy: ' + str(incorrect / len(real)))
 
 print('KNN:')
-classifier = KNeighborsClassifier(5)
+classifier = KNeighborsClassifier(3)
 classifier.fit(features, labels)
 print_accuracy(classifier.predict(testfeatures), testlabels)
 print()
@@ -50,12 +50,12 @@ print_accuracy(classifier.predict(testfeatures), testlabels)
 print()
 
 print('Adaboost:')
-classifier = AdaBoostClassifier(n_estimators=20) 
+classifier = AdaBoostClassifier(n_estimators=25) 
 classifier.fit(features, labels)
 print_accuracy(classifier.predict(testfeatures), testlabels)
 print()
 
 print('Gradient Boosting:')
-classifier = GradientBoostingClassifier(n_estimators=20) 
+classifier = GradientBoostingClassifier(n_estimators=25) 
 classifier.fit(features, labels)
 print_accuracy(classifier.predict(testfeatures), testlabels)

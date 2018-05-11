@@ -37,7 +37,7 @@ for depth in depths:
 print()
 
 print("Adaboosting")
-numEstimators = [i for i in range(1,50, 2)]
+numEstimators = [i for i in range(1,200, 10)]
 for num in numEstimators:
     classifier = AdaBoostClassifier(n_estimators=num) 
     scores = cross_val_score(classifier, features, labels, cv=10)
@@ -45,7 +45,7 @@ for num in numEstimators:
 print()
 
 print("Gradient Boosting")
-numEstimators = [i for i in range(1, 50, 2)]
+numEstimators = [i for i in range(1, 200, 10)]
 for num in numEstimators:
     classifier = GradientBoostingClassifier(n_estimators=num) 
     scores = cross_val_score(classifier, features, labels, cv=10)
