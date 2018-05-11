@@ -8,10 +8,12 @@ import numpy as np
 classicaldata = open('data_label=0.csv', 'r').read().split('\n')
 crowdata = [row.split(',') for row in classicaldata]
 crowdata.remove([''])
+crowdata = np.array(crowdata)[0:100,:]
 
 jazzdata = open('data_label=1.csv', 'r').read().split('\n')
 jrowdata = [row.split(',') for row in jazzdata]
 jrowdata.remove([''])
+jrowdata = np.array(jrowdata)[0:100,:]
 
 trainingdata = np.vstack((np.array(crowdata), np.array(jrowdata)))
 num_features = np.shape(trainingdata)[1] - 1
@@ -35,7 +37,7 @@ for depth in depths:
 print()
 
 print("Adaboosting")
-numEstimators = [i for i in range(2, 16)]
+numEstimators = [i for i in range(1,50, 2)]
 for num in numEstimators:
     classifier = AdaBoostClassifier(n_estimators=num) 
     scores = cross_val_score(classifier, features, labels, cv=10)
@@ -43,7 +45,7 @@ for num in numEstimators:
 print()
 
 print("Gradient Boosting")
-numEstimators = [i for i in range(25, 39, 1)]
+numEstimators = [i for i in range(1, 50, 2)]
 for num in numEstimators:
     classifier = GradientBoostingClassifier(n_estimators=num) 
     scores = cross_val_score(classifier, features, labels, cv=10)

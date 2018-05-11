@@ -162,7 +162,7 @@ for i, graph in enumerate(rawdata):
     features[i][1] = np.sum(adjMatrix) #Number of edges
     features[i][2], features[i][3] = (num_SCCs(adjMatrix))
     features[i][4] = dijkstras(adjMatrix)
-    features[i][5] = kruskals(adjMatrix)
+    #features[i][5] = kruskals(adjMatrix)
 
     print(".", end="")
     stdout.flush()

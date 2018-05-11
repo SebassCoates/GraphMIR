@@ -92,7 +92,10 @@ output_directory = ""
 midi_files = []
 for arg in argv[1:]:
     if ".mid" in arg or ".MID" in arg:
-        midi_files.append((MidiFile(arg), arg))
+        try:
+            midi_files.append((MidiFile(arg), arg))
+        except:
+            print("Unable to open midi file " + arg)
     elif "--dir=" in arg:
         output_directory = arg.replace("--dir=", "")
     else:
