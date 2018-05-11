@@ -2,6 +2,29 @@ from sys import argv, stdout
 import numpy as np
 from heapq import heappush, heappop
 
+def matching(adjMat):
+    numNodes = len(adjMat)
+
+    dNodes = [sum(row) for row in adjMat]
+    nodes = [(i, dNodes[i]) for i in range(len(adjMat))]
+    numExposed = len(adjMat)
+    matching = [-1 for i in range(len(adjMat))]
+
+    for i in range(len(adjMat)):
+            node, unused = nodes[i]
+            neighborColors = set()
+            if matching[node] == -1:
+                for j in range(len(adjMat)):
+                    neighbor, unused = nodes[j]
+                    if adjMat[node][neighbor] != 0:
+                        if matching[neighbor] == -1:
+                            matching[node] = neighbor
+                            matching[neighbor] = node
+                            numExposed -= 2
+                            break
+
+    return(numExposed)
+
 def kruskals(adjMat):
     def same_tree(node, neighbor, trees):
         return trees[node] == trees[neighbor]
@@ -130,8 +153,11 @@ def num_SCCs(adjMat):
 label = ''
 path  = ''
 rawdata = []
+training = False
 for arg in argv[1:]:
-    if "--label=" not in arg:
+    if arg == '--train':
+            training = True
+    elif "--label=" not in arg:
         rawdata.append(open(arg).read().split('\n'))
     elif "--label=" in arg:
         if label == '':
@@ -162,13 +188,17 @@ for i, graph in enumerate(rawdata):
     features[i][1] = np.sum(adjMatrix) #Number of edges
     features[i][2], features[i][3] = (num_SCCs(adjMatrix))
     features[i][4] = dijkstras(adjMatrix)
-    #features[i][5] = kruskals(adjMatrix)
+    features[i][5] = matching(adjMatrix)
 
     print(".", end="")
     stdout.flush()
 print()
 
-outfile = open('data_label=' + label + ".csv", 'w')
+if training:
+    outfile = open('data_label_train_' + label + ".csv", 'w')
+else:
+    outfile = open('data_label_test_' + label + ".csv", 'w')
+
 for row in features:
     for feature in row:
         outfile.write(str(feature))

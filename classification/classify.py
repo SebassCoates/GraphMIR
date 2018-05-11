@@ -5,12 +5,12 @@ from sklearn.model_selection import cross_val_score
 
 import numpy as np
 
-classicaldata = open('data_label=0.csv', 'r').read().split('\n')
+classicaldata = open('data_label_train_0.csv', 'r').read().split('\n')
 crowdata = [row.split(',') for row in classicaldata]
 crowdata.remove([''])
 crowdata = np.array(crowdata)[0:100,:]
 
-jazzdata = open('data_label=1.csv', 'r').read().split('\n')
+jazzdata = open('data_label_train_1.csv', 'r').read().split('\n')
 jrowdata = [row.split(',') for row in jazzdata]
 jrowdata.remove([''])
 jrowdata = np.array(jrowdata)[0:100,:]

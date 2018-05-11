@@ -51,10 +51,12 @@ def parse_note_data(track, ticks_per_beat):
             unit_length = msg.denominator
         else:
             pass
-    
     return list(filter(([]).__ne__,note_data))
 
 def generate_graph(note_data):
+    if len(note_data) == 0:
+        return []
+
     notes = {} 
     note_index = 0
     for chord in note_data:
@@ -77,6 +79,8 @@ def generate_graph(note_data):
     return adjMatrix
 
 def write_graph(adjMatrix, directory, filename):
+    if adjMatrix == []:
+        return
     fullname = os.path.join(directory, filename + ".grph")
     fullname = directory + "/" + filename
     outfile = open(fullname, 'w')
