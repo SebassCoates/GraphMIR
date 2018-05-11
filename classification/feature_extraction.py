@@ -184,11 +184,11 @@ for i, graph in enumerate(rawdata):
                 break #done reading row
             adjMatrix[r][int(split[0])] = int(float(split[1]))
 
-    features[i][0] = len(graph) #Number of nodes
-    features[i][1] = np.sum(adjMatrix) #Number of edges
-    features[i][2], features[i][3] = (num_SCCs(adjMatrix))
-    features[i][4] = dijkstras(adjMatrix)
-    features[i][5] = matching(adjMatrix)
+    #features[i][0] = len(graph) #Number of nodes
+    #features[i][1] = np.sum(adjMatrix) #Number of edges
+    #features[i][2], features[i][3] = (num_SCCs(adjMatrix))
+    #features[i][4] = dijkstras(adjMatrix)
+    #features[i][5] = matching(adjMatrix)
 
     print(".", end="")
     stdout.flush()
